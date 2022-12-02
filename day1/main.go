@@ -38,6 +38,7 @@ func opti(ss []string, k int) {
 			tmp += n
 		}
 	}
+	fmt.Println(table[0] + table[1] + table[2])
 }
 
 func FastAtoi(s string) int {
@@ -54,7 +55,7 @@ func main() {
 	f, _ := os.Open("input.txt")
 	data, _ := io.ReadAll(f)
 	ss := strings.Split(string(data), "\n")
-	k := 15
+	k := 3
 	t := time.Now()
 	opti(ss, k)
 	fmt.Println(time.Since(t))
