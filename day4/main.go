@@ -53,7 +53,7 @@ func ex2(ss []string) int {
 		r2[1] = FastAtoi(s3[1])
 		if r1[0] <= r2[0] && r1[1] >= r2[0] || r1[1] >= r2[1] && r1[0] <= r2[1] {
 			sum++
-		} else if r2[0] <= r1[0] && r2[1] >= r1[0] && r2[1] >= r1[1] && r2[0] <= r2[1] {
+		} else if r2[0] <= r1[0] && r2[1] >= r1[0] || r2[1] >= r1[1] && r2[0] <= r2[1] {
 			sum++
 		}
 	}
@@ -72,5 +72,4 @@ func main() {
 	t = time.Now()
 	fmt.Println(ex2(ss))
 	fmt.Println(time.Since(t))
-
 }
