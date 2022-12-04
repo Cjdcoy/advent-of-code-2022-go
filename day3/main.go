@@ -15,7 +15,7 @@ func ex1(ss []string) int {
 		for idx := 0; idx < len(s)/2; idx++ {
 			for idx2 := len(s) / 2; idx2 < len(s); idx2++ {
 				if s[idx] == s[idx2] {
-					if strings.Contains(string(tmp), string(s[idx])) {
+					if contains(string(tmp), s[idx]) {
 						continue
 					} else {
 						if s[idx] >= 'a' {
@@ -32,13 +32,22 @@ func ex1(ss []string) int {
 	return sum
 }
 
+func contains(s string, c byte) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] == c {
+			return true
+		}
+	}
+	return false
+}
+
 func getMatches(s1, s2 string) []byte {
 	var matches []byte
 
 	for idx := 0; idx < len(s1); idx++ {
 		for idx2 := 0; idx2 < len(s2); idx2++ {
 			if s1[idx] == s2[idx2] {
-				if strings.Contains(string(matches), string(s2[idx2])) {
+				if contains(string(matches), s2[idx2]) {
 					continue
 				} else {
 					matches = append(matches, s2[idx2])
