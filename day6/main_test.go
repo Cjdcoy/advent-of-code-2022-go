@@ -32,5 +32,6 @@ func benchmarkSolutionEx2(b *testing.B) {
 	})
 }
 
-func BenchmarkSolutionTopk3OEx1(b *testing.B) { benchmarkSolutionEx1(b) }
-func BenchmarkSolutionTopk3OEx2(b *testing.B) { benchmarkSolutionEx2(b) }
+func BenchmarkSolutionEx1(b *testing.B) { benchmarkSolutionEx1(b) }
+
+func BenchmarkSolutionEx2(b *testing.B) { benchmarkSolutionEx2(b) }
