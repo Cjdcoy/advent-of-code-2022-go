@@ -14,35 +14,31 @@ var tot = 0
 var sizes = []int{0}
 
 func cd(ss []string, idx int) (int, int) {
-	var s int
-	localSize := 0
+	var s, localSize, subDirs int
 	var subSizes []int
-	subdirs := 0
 	for i := idx; i < len(ss); i++ {
 		cmd := strings.Split(ss[i], " ")
 		if val, err := strconv.Atoi(cmd[0]); err == nil {
 			localSize += val
-			continue
 		} else if string(cmd[1]) == "cd" {
 			if cmd[2] == ".." {
 				return localSize, i
 			}
 			s, i = cd(ss, i+1)
 			subSizes = append(subSizes, s)
-			subdirs--
+			subDirs--
 			localSize += s
-			if localSize <= 100000 && subdirs == 0 {
+			if localSize <= 100000 && subDirs == 0 {
 				tot += localSize
-			} else if localSize > 100000 && subdirs == 0 {
+			} else if localSize > 100000 && subDirs == 0 {
 				for _, n := range subSizes {
 					if n < 100000 {
 						tot += n
 					}
 				}
 			}
-			continue
 		} else if cmd[0] == "dir" {
-			subdirs++
+			subDirs++
 		}
 	}
 	return localSize, len(ss)
@@ -54,15 +50,12 @@ func ex1(ss []string) int {
 }
 
 func cd2(ss []string, idx int) (int, int) {
-	var s int
-	localSize := 0
+	var localSize, subDirs, s int
 	var subSizes []int
-	subdirs := 0
 	for i := idx; i < len(ss); i++ {
 		cmd := strings.Split(ss[i], " ")
 		if val, err := strconv.Atoi(cmd[0]); err == nil {
 			localSize += val
-			continue
 		} else if string(cmd[1]) == "cd" {
 			if cmd[2] == ".." {
 				sizes = append(sizes, localSize)
@@ -70,11 +63,10 @@ func cd2(ss []string, idx int) (int, int) {
 			}
 			s, i = cd2(ss, i+1)
 			subSizes = append(subSizes, s)
-			subdirs--
+			subDirs--
 			localSize += s
-			continue
 		} else if cmd[0] == "dir" {
-			subdirs++
+			subDirs++
 		}
 	}
 	sizes = append(sizes, localSize)

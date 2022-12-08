@@ -27,7 +27,7 @@ func benchmarkSolutionEx2(b *testing.B) {
 	tokens := strings.Split(string(input), "\n")
 	b.Run("solution", func(b *testing.B) {
 		for n := 0; n < b.N; n++ {
-			SolutionA(tokens)
+			ex2(tokens)
 		}
 	})
 }
