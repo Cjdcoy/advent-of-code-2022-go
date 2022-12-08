@@ -14,20 +14,20 @@ var tot = 0
 var sizes = []int{0}
 
 func cd(ss []string, idx int) (int, int) {
-	var s, localSize, subDirs int
+	var size, localSize, subDirs int
 	var subSizes []int
 	for i := idx; i < len(ss); i++ {
-		cmd := strings.Split(ss[i], " ")
-		if val, err := strconv.Atoi(cmd[0]); err == nil {
-			localSize += val
-		} else if string(cmd[1]) == "cd" {
-			if cmd[2] == ".." {
+		if ss[i][2:4] == "cd" {
+			if len(ss[i]) > 6 && ss[i][5:7] == ".." {
+				//ex2
+				sizes = append(sizes, localSize)
 				return localSize, i
 			}
-			s, i = cd(ss, i+1)
-			subSizes = append(subSizes, s)
+			size, i = cd(ss, i+1)
+			subSizes = append(subSizes, size)
 			subDirs--
-			localSize += s
+			localSize += size
+			//ex1
 			if localSize <= 100000 && subDirs == 0 {
 				tot += localSize
 			} else if localSize > 100000 && subDirs == 0 {
@@ -37,10 +37,14 @@ func cd(ss []string, idx int) (int, int) {
 					}
 				}
 			}
-		} else if cmd[0] == "dir" {
+		} else if ss[i][0:3] == "dir" {
 			subDirs++
+		} else if val, err := strconv.Atoi(strings.Split(ss[i], " ")[0]); err == nil {
+			localSize += val
 		}
 	}
+	//ex2
+	sizes = append(sizes, localSize)
 	return localSize, len(ss)
 }
 
@@ -49,39 +53,16 @@ func ex1(ss []string) int {
 	return tot
 }
 
-func cd2(ss []string, idx int) (int, int) {
-	var localSize, subDirs, s int
-	var subSizes []int
-	for i := idx; i < len(ss); i++ {
-		cmd := strings.Split(ss[i], " ")
-		if val, err := strconv.Atoi(cmd[0]); err == nil {
-			localSize += val
-		} else if string(cmd[1]) == "cd" {
-			if cmd[2] == ".." {
-				sizes = append(sizes, localSize)
-				return localSize, i
-			}
-			s, i = cd2(ss, i+1)
-			subSizes = append(subSizes, s)
-			subDirs--
-			localSize += s
-		} else if cmd[0] == "dir" {
-			subDirs++
-		}
-	}
-	sizes = append(sizes, localSize)
-	return localSize, len(ss)
-}
-
 func ex2(ss []string) int {
 	best := math.MaxInt
-	totSize, _ := cd2(ss, 0)
+	totSize, _ := cd(ss, 0)
 	for _, n := range sizes {
 		tmp := 70000000 - (totSize) + n
 		if tmp > 30000000 && n < best {
 			best = n
 		}
 	}
+	sizes = nil
 	return best
 }
 
@@ -93,6 +74,7 @@ func main() {
 	t := time.Now()
 	fmt.Println(ex1(ss))
 	fmt.Println(time.Since(t))
+
 	t = time.Now()
 	fmt.Println(ex2(ss))
 	fmt.Println(time.Since(t))
