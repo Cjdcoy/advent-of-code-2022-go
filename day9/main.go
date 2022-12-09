@@ -38,25 +38,22 @@ func checkSurroundings(ys, xs, y, x int) (int, int) {
 	return ys, xs
 }
 
+/*
+#######
+##OOO##
+#O###O#
+#O#T#O#
+#O###O#
+##OOO##
+#######
+
+*/
+
 func ex1(ss []string) int {
-	var m [][]byte
-	size := 1000
-	start := 500
-	x := start
-	y := start
-	xs := start
-	ys := start
+	m := make(map[point]bool)
+	var x, y, xs, ys int
 
-	// fill map
-	for i := 0; i < size; i++ {
-		var tmp []byte
-		for i2 := 0; i2 < size; i2++ {
-			tmp = append(tmp, '0')
-		}
-		m = append(m, tmp)
-	}
-
-	m[ys][xs] = 't'
+	m[point{xs, ys}] = true
 	for _, s := range ss {
 		split := strings.Split(s, " ")
 		nbMoves, _ := strconv.Atoi(split[1])
@@ -65,41 +62,34 @@ func ex1(ss []string) int {
 			for i := 0; i < nbMoves; i++ {
 				y--
 				ys, xs = checkSurroundings(ys, xs, y, x)
-				m[ys][xs] = 't'
+				m[point{xs, ys}] = true
+
 			}
 			break
 		case "D":
 			for i := 0; i < nbMoves; i++ {
 				y++
 				ys, xs = checkSurroundings(ys, xs, y, x)
-				m[ys][xs] = 't'
+				m[point{xs, ys}] = true
 			}
 			break
 		case "L":
 			for i := 0; i < nbMoves; i++ {
 				x--
 				ys, xs = checkSurroundings(ys, xs, y, x)
-				m[ys][xs] = 't'
+				m[point{xs, ys}] = true
 			}
 			break
 		case "R":
 			for i := 0; i < nbMoves; i++ {
 				x++
 				ys, xs = checkSurroundings(ys, xs, y, x)
-				m[ys][xs] = 't'
+				m[point{xs, ys}] = true
 			}
 			break
 		}
 	}
-	tot := 0
-	for i := 0; i < size; i++ {
-		for i2 := 0; i2 < size; i2++ {
-			if m[i][i2] == 't' {
-				tot++
-			}
-		}
-	}
-
+	tot := len(m)
 	return tot
 }
 
@@ -107,7 +97,7 @@ type point struct {
 	y, x int
 }
 
-func moveRope(m [][]byte, rope []point, y, x int) ([][]byte, []point) {
+func moveRope(m map[point]bool, rope []point, y, x int) (map[point]bool, []point) {
 	for i := 0; i < len(rope); i++ {
 		if i == 0 {
 			rope[i].y, rope[i].x = checkSurroundings(rope[i].y, rope[i].x, y, x)
@@ -115,33 +105,21 @@ func moveRope(m [][]byte, rope []point, y, x int) ([][]byte, []point) {
 			rope[i].y, rope[i].x = checkSurroundings(rope[i].y, rope[i].x, rope[i-1].y, rope[i-1].x)
 		}
 		if i+1 == len(rope) {
-			m[rope[i].y][rope[i].x] = 't'
+			m[rope[i]] = true
 		}
 	}
 	return m, rope
 }
 
 func ex2(ss []string) int {
-	var m [][]byte
+	m := make(map[point]bool)
 	var rope []point
-	size := 1000
-	start := 500
-	x := start
-	y := start
-
-	// create map
-	for i := 0; i < size; i++ {
-		var tmp []byte
-		for i2 := 0; i2 < size; i2++ {
-			tmp = append(tmp, '0')
-		}
-		m = append(m, tmp)
-	}
+	var x, y int
 	//create rope
 	for i := 0; i < 9; i++ {
-		rope = append(rope, point{start, start})
+		rope = append(rope, point{y, x})
 	}
-	m[x][y] = 't'
+	m[point{x, y}] = true
 	for _, s := range ss {
 		split := strings.Split(s, " ")
 		nbMoves, _ := strconv.Atoi(split[1])
@@ -172,15 +150,7 @@ func ex2(ss []string) int {
 			break
 		}
 	}
-	tot := 0
-	for i := 0; i < size; i++ {
-		for i2 := 0; i2 < size; i2++ {
-			if m[i][i2] == 't' {
-				tot++
-			}
-		}
-	}
-
+	tot := len(m)
 	return tot
 }
 
